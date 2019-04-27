@@ -1,0 +1,5 @@
+<%= form_tag("/repos", method: "submit_token") do %>
+  <%= label_tag(:q, "Token:") %>
+  <%= text_field_tag(:token) %>
+  <%= submit_tag("Submit") %>
+<% end %>
