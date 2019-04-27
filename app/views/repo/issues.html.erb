@@ -1,0 +1,30 @@
+
+<%= form_tag(@issues_url, method: "get") do %>
+  <%= select_tag(:sortKey, options_for_select([['Created at', 'created_at'],
+                                               ['Updated at', 'updated_at'],
+                                               ['Title', 'title']])) %>
+  <%= submit_tag("Sort") %>
+<% end %>
+
+<a href='/repos'>Back</a>
+
+<div>
+  <% @issues.each do |i| %>
+    <ul>
+      <% if i['assignee'] %>
+        <li><img src= <%= i['assignee']['avatar_url'] %> ></img></li>
+      <% else %>
+        <li>No Assignee</li>
+      <% end %>
+      <li>
+        <span><%= i['title'] %></span>
+      </li>
+      <li>
+        <span><%= i['created_at'] %></span>
+      </li>
+      <li>
+        <span><%= i['updated_at'] %></span>
+      </li>
+    </ul>
+  <% end %>
+</div>

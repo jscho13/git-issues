@@ -6,25 +6,21 @@ class RepoController < ApplicationController
 
   def repos
     token = validate_session(params[:token])
-    @repos = GitRequest.repos(token)
+    user = GitRequest.user(token)
+
+    cookies[:user] = user['login']
+    repos = GitRequest.repos(token, user)
+
+    @repos = repos
   end
 
   def issues
     token = validate_session(params[:token])
-    @issues = GitRequest.issues(token, params[:repo])
-  end
+    user = cookies[:user]
+    repo = params[:repo]
+    sort_key = params[:sortKey]
 
-  private
-
-  # 1. Would like to reset sessions on re-login, to avoid session fixation hacks.
-  # https://stackoverflow.com/questions/4812813/rails-login-reset-session
-  def validate_session(new_token)
-    session[:token] = new_token || session[:token]
-    if session[:token]
-      return session[:token]
-    else
-      redirect_to('/login') 
-    end
+    @issues = GitRequest.issues(token, user, repo, sort_key)
   end
 
 end

@@ -1,7 +1,10 @@
-<div>
-  Hello <%= @token %>
-</div>
-
-<div>
-  <%= @repos %>
-</div>
+<ul>
+  <% @repos.each do |r| %>
+    <li>
+      <span><%= r['name'] %></span>
+      <span>
+        <a href= <%='/repos/' + r['name'] + '/issues'%> >Link</a>
+      </span>
+    </li>
+  <% end %>
+</ul>

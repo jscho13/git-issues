@@ -1,18 +1,27 @@
 module GitRequest
   extend self
 
-  def repos(token)
-    user = fetch('https://api.github.com/user', token)
-    repos_url = user['repos_url']
-    @repos = fetch(repos_url, token)
+  def user(token)
+    user_url = 'https://api.github.com/user'
+    user_json = fetch(token, user_url)
+    user_json
   end
 
-  def issues
+  def repos(token, user)
+    repos_url = user['repos_url']
+    repos_json = fetch(token, repos_url)
+    repos_json
+  end
+
+  def issues(token, user, repo, sort_key)
+    issues_url = ['https://api.github.com/repos', user, repo, 'issues'].join('/')
+    issues_json = fetch(token, issues_url)
+    issues_json.sort_by { |i| i[sort_key] }
   end
 
   private
 
-  def fetch(url, token)
+  def fetch(token, url)
     uri = URI.parse(url)
     http = Net::HTTP.new(uri.hostname, uri.port)
     http.use_ssl = true

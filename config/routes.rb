@@ -4,5 +4,5 @@ Rails.application.routes.draw do
   get 'login', to: 'repo#login'
   get 'repos', to: 'repo#repos'
   post 'repos', to: 'repo#repos'
-  get 'repos/:repo/issues', to: 'repo#issues'
+  get 'repos/:repo/issues', to: 'repo#issues', constraints: { repo: /.+/ }
 end
