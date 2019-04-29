@@ -1,3 +1,92 @@
 // Place all the styles related to the repo controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background-color: beige;
+}
+
+.login--grid {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 50px auto 50px;
+  grid-template-rows: auto;
+  grid-template-areas:
+    ". . ."
+    ". content ."
+    ". . .";
+
+  .login {
+    grid-area: content;
+    place-self: center;
+
+    form {
+      text-align: center;
+      
+      label {
+        font-size: 2em;
+      }
+
+      input[type=submit] {
+        color: #FFF;
+        background-color: #900;
+        font-weight: bold;
+        font-size: 1em;
+      }
+
+      input[type=text] {
+        padding: 12px 30px;
+        margin: 8px 0;
+        border: 3px solid #ccc;
+        -webkit-transition: 0.5s;
+        transition: 0.5s;
+        outline: none;
+
+        &:focus {
+          border: 3px solid #555;
+        }
+      }
+    }
+  }
+}
+
+.repos {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.issues--header {
+  text-align: center;
+}
+
+.issues {
+  display: grid;
+  grid-template-columns: auto auto;
+
+  @media only screen and (max-width: 1000px) {
+    margin: 0 100px;
+    grid-template-columns: auto;
+  }
+
+  img {
+    max-width: 40px;
+    max-height: 40px;
+  }
+
+  .issues__item {
+    background-color: white;
+    border: 1px solid black;
+    margin: 50px 0;
+    padding: 50px;
+    place-self: center;
+    text-align: center;
+    width: 400px;
+  }
+}
+

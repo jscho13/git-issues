@@ -1,5 +1,9 @@
-<%= form_tag("/repos", method: "submit_token") do %>
-  <%= label_tag(:q, "Token:") %>
-  <%= text_field_tag(:token) %>
-  <%= submit_tag("Submit") %>
-<% end %>
+<div class='login--grid'>
+  <div class='login'> 
+    <%= form_tag('/repos', method: 'submit_token') do %>
+      <%= label_tag(:q, 'Welcome!') %><br>
+      <%= text_field_tag('token', nil, placeholder: 'Paste your token here') %><br>
+      <%= submit_tag('Submit') %>
+    <% end %>
+  </div>
+</div>

@@ -1,30 +1,27 @@
+<div class='issues--header'>
+  <h3>Issues</h3>
+    
+  <%= form_tag(@issues_url, method: "get") do %>
+    <%= select_tag(:sortKey,
+      options_for_select([['Created at desc', 'created_at_desc'],
+                          ['Created at asc', 'created_at_asc'],
+                          ['Title', 'title']])) %><br>
+    <%= submit_tag("Sort") %>
+  <% end %>
+  <a href='/repos'>Back to Repos</a>
+</div>
 
-<%= form_tag(@issues_url, method: "get") do %>
-  <%= select_tag(:sortKey, options_for_select([['Created at', 'created_at'],
-                                               ['Updated at', 'updated_at'],
-                                               ['Title', 'title']])) %>
-  <%= submit_tag("Sort") %>
-<% end %>
-
-<a href='/repos'>Back</a>
-
-<div>
+<div class='issues'>
   <% @issues.each do |i| %>
-    <ul>
+    <div class='issues__item'>
       <% if i['assignee'] %>
-        <li><img src= <%= i['assignee']['avatar_url'] %> ></img></li>
+        <img src= <%= i['assignee']['avatar_url'] %> ></img>
       <% else %>
-        <li>No Assignee</li>
+        <img src='/default.png'></img>
       <% end %>
-      <li>
-        <span><%= i['title'] %></span>
-      </li>
-      <li>
-        <span><%= i['created_at'] %></span>
-      </li>
-      <li>
-        <span><%= i['updated_at'] %></span>
-      </li>
-    </ul>
+      <div><%= i['title'] %></div>
+      <div><%= i['created_at'] %></div>
+      <div><%= distance_of_time_in_words(i['updated_at']) %></div>
+    </div>
   <% end %>
 </div>

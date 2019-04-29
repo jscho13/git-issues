@@ -18,7 +18,21 @@ module GitRequest
   def issues(token, user, repo, sort_key)
     issues_url = ['https://api.github.com/repos', user, repo, 'issues'].join('/')
     issues_json = fetch(token, issues_url)
-    issues_json.sort_by { |i| i[sort_key] }
+    if sort_key == 'created_at_asc'
+      issues_json.sort! { |a,b| DateTime.parse(a['created_at']) <=> DateTime.parse(b['created_at']) }
+    elsif sort_key == 'created_at_desc'
+      issues_json.sort! { |a,b| DateTime.parse(b['created_at']) <=> DateTime.parse(a['created_at']) }
+    else
+      issues_json.sort_by! { |i| i[sort_key] }
+    end
+
+    issues_json.each do |i|
+      formated_date = Date.parse(i['created_at']).strftime('%m/%d/%Y')
+      i['created_at'] = formated_date 
+
+      diff_date = DateTime.now - DateTime.parse(i['updated_at'])
+      i['updated_at'] = diff_date * 24 * 60 * 60.to_i
+    end
   end
 
   private

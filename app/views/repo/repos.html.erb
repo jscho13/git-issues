@@ -1,10 +1,8 @@
-<ul>
+<div class='repos'>
+  <h3>List of <%= @user['login'] %>'s repositories</h3>
   <% @repos.each do |r| %>
-    <li>
-      <span><%= r['name'] %></span>
-      <span>
-        <a href= <%='/repos/' + r['name'] + '/issues'%> >Link</a>
-      </span>
-    </li>
+    <div>
+      <a href= <%='/repos/' + r['name'] + '/issues'%> ><%= r['name'] %></a>
+    </div>
   <% end %>
-</ul>
+</div>

@@ -11,6 +11,7 @@ class RepoController < ApplicationController
     cookies[:user] = user['login']
     repos = GitRequest.repos(token, user)
 
+    @user = user
     @repos = repos
   end
 
