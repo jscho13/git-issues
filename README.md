@@ -1,5 +1,7 @@
 # README
 
+This app is availale on Heroku at: https://peaceful-temple-82943.herokuapp.com
+
 ### Installation
 
 This requires Ruby version 2.6.1 to work. Please install accordingly.
@@ -20,8 +22,6 @@ Last setup the server and get it running with:
     rails s
 
 You should be able to view the app locally at `http://localhost:3000`
-
-This app is also deployed to Heroku at: https://serene-ravine-22677.herokuapp.com/
 
 ### Tests
 
