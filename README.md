@@ -8,7 +8,7 @@ This requires Ruby version 2.6.1 to work. Please install accordingly.
 
 For RVM users:
 
-    rvm install "ruby-2.6.3"
+    rvm install "ruby-2.6.1"
 
 Install depenencies using bundler: 
 
