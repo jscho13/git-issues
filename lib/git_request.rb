@@ -18,13 +18,7 @@ module GitRequest
   def issues(token, user, repo, sort_key)
     issues_url = ['https://api.github.com/repos', user, repo, 'issues'].join('/')
     issues_json = fetch(token, issues_url)
-    if sort_key == 'created_at_asc'
-      issues_json.sort! { |a,b| DateTime.parse(a['created_at']) <=> DateTime.parse(b['created_at']) }
-    elsif sort_key == 'created_at_desc'
-      issues_json.sort! { |a,b| DateTime.parse(b['created_at']) <=> DateTime.parse(a['created_at']) }
-    else
-      issues_json.sort_by! { |i| i[sort_key] }
-    end
+    issues_json = sort_issues(issues_json, sort_key) if sort_key
 
     issues_json.each do |i|
       formated_date = Date.parse(i['created_at']).strftime('%m/%d/%Y')
@@ -33,6 +27,18 @@ module GitRequest
       diff_date = DateTime.now - DateTime.parse(i['updated_at'])
       i['updated_at'] = diff_date * 24 * 60 * 60.to_i
     end
+  end
+
+  def sort_issues(issues_json, sort_key)
+    if sort_key == 'created_at_asc'
+      issues_json.sort! { |a,b| DateTime.parse(a['created_at']) <=> DateTime.parse(b['created_at']) }
+    elsif sort_key == 'created_at_desc'
+      issues_json.sort! { |a,b| DateTime.parse(b['created_at']) <=> DateTime.parse(a['created_at']) }
+    else
+      issues_json.sort_by! { |i| i[sort_key] }
+    end
+
+    issues_json
   end
 
   private
@@ -53,11 +59,39 @@ end
 
 if __FILE__ == $0
   require 'minitest/autorun'
+  require 'date'
 
   class GitRequestTests < MiniTest::Test
-    def test_basic
-      actual = OutlookFixer.add_utc_offset '2019-04-05T01:01:01'
-      expected = '2019-04-05T01:01:01Z'
+    ISSUES_CONST = [
+      { "created_at"=>"2020-04-29T02:19:25Z", "title"=>"b" },
+      { "created_at"=>"2018-04-29T02:19:25Z", "title"=>"a" },
+      { "created_at"=>"2019-04-29T02:19:25Z", "title"=>"c" }
+    ]
+
+    def test_desc
+      actual = GitRequest.sort_issues(ISSUES_CONST, 'created_at_asc')
+      expected = [ { "created_at"=>"2018-04-29T02:19:25Z", "title"=>"a" },
+                   { "created_at"=>"2019-04-29T02:19:25Z", "title"=>"c" },
+                   { "created_at"=>"2020-04-29T02:19:25Z", "title"=>"b" }
+                 ]
+      assert_equal expected, actual
+    end
+
+    def test_asc
+      actual = GitRequest.sort_issues(ISSUES_CONST, 'created_at_desc')
+      expected = [ { "created_at"=>"2020-04-29T02:19:25Z", "title"=>"b" },
+                   { "created_at"=>"2019-04-29T02:19:25Z", "title"=>"c" },
+                   { "created_at"=>"2018-04-29T02:19:25Z", "title"=>"a" }
+                 ]
+      assert_equal expected, actual
+    end
+
+    def test_title
+      actual = GitRequest.sort_issues(ISSUES_CONST, 'title')
+      expected = [ { "created_at"=>"2018-04-29T02:19:25Z", "title"=>"a" },
+                   { "created_at"=>"2020-04-29T02:19:25Z", "title"=>"b" },
+                   { "created_at"=>"2019-04-29T02:19:25Z", "title"=>"c" }
+                 ]
       assert_equal expected, actual
     end
   end
